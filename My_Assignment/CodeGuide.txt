@@ -1,0 +1,77 @@
+==============================My_Assignment Code Guide==========================
+
+Steps to run the project
+========================
+
+1. Clone from GIT
+2. Clean and Build using Gradle.
+3. Run the Application.java file located under src/main/java/com/app/repository folder
+4. Spring Boot application will start up. 
+5. Using any REST Client (I have used Advanced Rest client for Chrome) to perform the following:
+
+	a) http://localhost:8080/shops  -> This returns all the available shops in a in-memory database. Initially there will be empty response.
+	b) http://localhost:8080/shops -> This will be a POST request. Raw data to be passed can of the following format:
+	   {
+			"shopName": "KFC",
+			"shopAddress": "R-Deccan Mall, Shop No.1,2,3,&4, Ground Floor, Opposite to Deccan PMT Bus Stand, Near Deccan Gymkhana, J.M Marg, Pune, Maharashtra",
+			"shopZipCode": "411004"
+		}
+	
+	   This call with save the data into in-memory database along with the shops's latitude and longitude. 
+	   The shop's latitude and longitude will be retrieved using Google MAP API by passing the address.
+	   
+	   Adding one more Shop:
+	   
+	   {
+	       "shopName": "KFC Mumbai",
+		   "shopAddress": "Kenilworth Mall, Linking Road, Bandra West, Mumbai, Maharashtra",
+		   "shopZipCode": "400050"
+	   }
+	   
+	    
+	c) http://localhost:8080/shops  : GET Call will return two shops at this moment. 
+
+    d)  Any subsequent post call with same shop name will update the shop details keeping the same name and returning the older details to the user. For example, a POST call with the below dat 
+         {
+			"shopName": "KFC",
+			"shopAddress": "Shop No. 1,2,3, Ground Floor, Spot 18 Building, Shivar Chowk, Rahatni, Pimpri Chinchwad, Maharashtra",
+			"shopZipCode": "411027"
+		}
+		
+		will return 
+		{
+			"shopName": "KFC",
+			"shopAddress": "R-Deccan Mall, Shop No.1,2,3,&4, Ground Floor, Opposite to Deccan PMT Bus Stand, Near Deccan Gymkhana, J.M Marg, Pune, Maharashtra",
+			"shopZipCode": "411004"
+		} 
+		as the previous version object. Current shop's latitude and longitude details will be added. 
+		
+	e) http://localhost:8080/shopsNearBy?latitude=18.635619600000002&longitude=73.81922329999999
+	
+	   This call is to locate the nearest shop to the user's current geo location. It will take two parameters latitude and longitude.
+	   At this moment, this parameters are hard coded with actual LatLng values of the machine location where this code was developed. 
+	   
+	   This call will first pull all the locations from database and then compare their LatLng coordinates with the passed parameter values and 
+	   return the nearest shop.
+	   
+	   In this case it will return the following:
+	   
+	    {
+			"shopName": "KFC",
+			"shopAddress": "Shop No. 1,2,3, Ground Floor, Spot 18 Building, Shivar Chowk, Rahatni, Pimpri Chinchwad, Maharashtra",
+			"shopZipCode": "411027"
+			"latitude": 18.6023058,
+			"longitude": 73.8119329
+		}
+	   
+	   
+7. Junit Test Classes
+
+   RetailManagerControllerTest contains Junit test cases for addShop and getShop functionality. 
+	  
+	
+	   
+		
+
+	
+
